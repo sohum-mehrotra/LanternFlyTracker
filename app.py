@@ -6,7 +6,6 @@ import os
 app = Flask(__name__)
 
 # Environment variables
-STORAGE_ACCOUNT_URL = os.getenv("STORAGE_ACCOUNT_URL")
 IMAGES_CONTAINER = os.getenv("IMAGES_CONTAINER", "lanternfly-images-469n70cr")
 CONN_STR = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 
@@ -33,7 +32,7 @@ def upload():
             overwrite=True,
             content_settings=ContentSettings(content_type=f.content_type)
         )
-        return jsonify(ok=True, url=f"{STORAGE_ACCOUNT_URL}/{IMAGES_CONTAINER}/{blob_name}")
+        return jsonify(ok=True, url=f"{cc.url}/{b.name}")
     except Exception as e:
         return jsonify(ok=False, error=str(e)), 500
 
@@ -41,7 +40,7 @@ def upload():
 def gallery():
     try:
         blobs = cc.list_blobs()
-        urls = [f"{STORAGE_ACCOUNT_URL}/{IMAGES_CONTAINER}/{b.name}" for b in blobs]
+        urls = [f"{cc.url}/{b.name}" for b in blobs]
         return jsonify(ok=True, gallery=urls)
     except Exception as e:
         return jsonify(ok=False, error=str(e)), 500
