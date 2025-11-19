@@ -32,7 +32,7 @@ def upload():
             overwrite=True,
             content_settings=ContentSettings(content_type=f.content_type)
         )
-        return jsonify(ok=True, url=f"{cc.url}/{b.name}")
+        return jsonify(ok=True, url=f"{cc.url}/{f.filename}")
     except Exception as e:
         return jsonify(ok=False, error=str(e)), 500
 
@@ -45,7 +45,7 @@ def gallery():
     except Exception as e:
         return jsonify(ok=False, error=str(e)), 500
 
-@app.route("/health")
+@app.route("/api/v1/health")
 def health():
     return jsonify(ok=True), 200
 
